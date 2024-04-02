@@ -1,7 +1,6 @@
 import asyncio
 import logging
 from typing import Optional
-from random import shuffle
 
 
 from binance_chain.http import AsyncHttpApiClient
@@ -9,6 +8,7 @@ from binance_chain.environment import BinanceEnvironment
 from binance_chain.node_rpc.http import AsyncHttpRpcClient
 from binance_chain.constants import RpcBroadcastRequestType
 from binance_chain.messages import Msg
+import secrets
 
 
 class PooledRpcClient:
@@ -42,7 +42,7 @@ class PooledRpcClient:
         """
         client = await AsyncHttpApiClient.create(loop=self._loop, env=self._env)
         peers = await client.get_node_peers()
-        shuffle(peers)
+        secrets.SystemRandom().shuffle(peers)
 
         self._clients = []
         for peer in peers:
