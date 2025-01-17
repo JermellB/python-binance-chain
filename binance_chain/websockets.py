@@ -1,12 +1,12 @@
 import asyncio
 import ujson as json
 import logging
-from random import random
 from typing import Dict, Callable, Awaitable, Optional, List
 
 import websockets as ws
 from binance_chain.environment import BinanceEnvironment
 from binance_chain.constants import KlineInterval
+import secrets
 
 
 class ReconnectingWebsocket:
@@ -94,7 +94,7 @@ class ReconnectingWebsocket:
 
     def _get_reconnect_wait(self, attempts: int) -> int:
         expo = 2 ** attempts
-        return round(random() * min(self.MAX_RECONNECT_SECONDS, expo - 1) + 1)
+        return round(secrets.SystemRandom().random() * min(self.MAX_RECONNECT_SECONDS, expo - 1) + 1)
 
     async def send_keepalive(self):
         msg = {"method": "keepAlive"}
